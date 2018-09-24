@@ -1,4 +1,4 @@
-![Logo EDboilerplate](https://paginasweb.live/images/logo.png)
+![Logo SigmaPCS](https://sigmapcs.com.mx/images/logo.png)
 
 # Sigmapcs-boilerplate
 
