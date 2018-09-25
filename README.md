@@ -11,16 +11,16 @@ Y para cada proyecto hacer lo mismo una vez y otra vez y otra vez. Frustrante.
 ## Características de Sigmapcs-boilerplate:
 
 * Usa gulp para automatizar tareas
-* Esta basado en Sass, Pug y ES6.
+* Esta basado en Sass, Pug y ES6+.
 * Compila Sass con autoprefixer y muestra los cambios en tiempo real
 * Compila Pug y actualiza el navegador con cada cambio
-* Compila ES6 con soporte para módulos ES6 (importar y exportar modulos)
+* Compila ES6+ con soporte para módulos ES6+ (importar y exportar modulos)
 * Detecta nuevos archivos añadidos al proyecto sin tener que reiniciar gulp
 * Captura errores en Sass, Pug y Js evitando que gulp se detenga.
 * Crea los sourcemaps de los archivos compilados
 * Tiene una estructura lista de estilos (con Sass) basada en SMACSS y ITCSS
 * Tiene una estructura lista para HTML (con Pug) que divide páginas e includes.
-* Tiene una estructura lista para importar y exportar modulos ES6
+* Tiene una estructura lista para importar y exportar modulos ES6+
 
 ## Modo de uso
 
