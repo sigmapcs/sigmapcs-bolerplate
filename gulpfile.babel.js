@@ -13,6 +13,7 @@ import sourcemaps from 'gulp-sourcemaps'
 import buffer from 'vinyl-buffer'
 import minify from 'gulp-minify'
 import imagemin from 'gulp-imagemin'
+import webp from 'gulp-webp'
 import sitemap from 'gulp-sitemap'
 
 const server = browserSync.create()
@@ -97,7 +98,13 @@ gulp.task('images', () => {
       imagemin.optipng({optimizationLevel: 5}),
       imagemin.svgo()
     ]))
-    .pipe(gulp.dest('./public/assets/img'))
+    .pipe(gulp.dest('./public/img'))
+})
+
+gulp.task('webp', ()=> {
+  gulp.src('./dev/images/**/*.{png,jpg,jpeg,PNG}')
+    .pipe(webp())
+    .pipe(gulp.dest('./public/img/webp'))
 })
 
 gulp.task('sitemap', () => {
@@ -110,15 +117,47 @@ gulp.task('sitemap', () => {
     .pipe(gulp.dest('./public'))
 })
 
-gulp.task('default', ['styles', 'pug', 'images', 'scripts'], () => {
+gulp.task('copy', function() {
+  gulp.src('./dev/images/**/*.svg')
+    .pipe(gulp.dest('./public/images'))
+});
+
+gulp.task('copyJS', function(){
+  gulp.src('./dev/assets/js/**/*.js')
+    .pipe(gulp.dest('./public/js'))
+});
+
+gulp.task('copyCSS', function(){
+  gulp.src('./dev/assets/css/**/*.css')
+    .pipe(gulp.dest('./public/css'))
+});
+
+gulp.task('copy-font', function() {
+  gulp.src('./dev/fonts/**/*.*')
+    .pipe(gulp.dest('./public/fonts'))
+});
+
+gulp.task('default', ['styles', 'pug', 'images', 'scripts', 'webp', 'copy-font', 'copyJS', 'copyCSS'], () => {
   server.init({
     server: {
       baseDir: './public'
     }
   })
 
-  watch('./dev/scss/**/**', () => gulp.start('styles'))
-  watch('./dev/js/**/**', () => gulp.start('scripts', server.reload))
-  watch('./dev/pug/**/**', () => gulp.start('pug', server.reload))
-  watch('./dev/img/**/**', () => gulp.start('images'))
+  gulp.watch('./dev/images/**/*', ['images']);
+  gulp.watch('./dev/images/**/*.svg', ['copy']);
+  gulp.watch('./dev/fonts/**/*.*', ['copy-font']);
+  gulp.watch('./dev/images/**/*', ['webp']);
+  gulp.watch('./dev/assets/js/**/*.js', ['copyJS']);
+  gulp.watch('./dev/assets/css/**/*.css', ['copyCss']);
+  watch('./dev/pug/**/*.pug', ()=> gulp.start('pug',server.reload));
+  watch('./dev/scss/**/*.scss', () => gulp.start('styles'));
+  watch('./dev/js/**/*.js', () => gulp.start('scripts',server.reload) );
+  watch('./dev/data/**/*.json','./dev/pug/**/*.pug', () => gulp.start('pug', server.reload) );
+  watch('./dev/md/docs/**/*.md', () => gulp.start('pug', server.reload) );
+  watch('./dev/images/**/*.{png,jpg,jpeg,gif}', () => gulp.start('images') );
+  watch('./dev/images/**/*.{png,jpg,jpeg}', () => gulp.start('webp') );
+  watch('./dev/assets/js/**/*.js', () => gulp.start('copyJS'));
+  watch('./dev/assets/css/**/*.css', () => gulp.start('copyCSS'));
+  watch('./dev/fonts/**/*.*', () => gulp.start('copy-font'));
 })
